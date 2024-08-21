@@ -1,0 +1,10 @@
+version: '3.9'
+
+services:
+
+  bot:
+    build:
+      context: ../bot
+    env_file:
+      - ../bot/.env-non-dev
+    container_name: bot
