@@ -9,7 +9,8 @@ class PostgresContainer(containers.DeclarativeContainer):
 
     wiring_config = containers.WiringConfiguration(
         modules = [
-            ...
+            'middlewares.inner.check_auth',
+            'routers.user.router',
         ]
     )
 

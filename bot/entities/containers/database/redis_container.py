@@ -8,7 +8,8 @@ class UserRedisContainer(containers.DeclarativeContainer):
 
     wiring_config = containers.WiringConfiguration(
         modules = [
-
+            'middlewares.inner.check_auth',
+            'routers.user.router',
         ]
     )
 
@@ -31,7 +32,8 @@ class TasksRedisContainer(containers.DeclarativeContainer):
 
     wiring_config = containers.WiringConfiguration(
         modules = [
-
+            'middlewares.inner.check_auth',
+            'routers.user.router',
         ]
     )
 

@@ -24,7 +24,7 @@ class Database:
         )
 
         self.async_session = sessionmaker(
-            bind = self.Engine, class_ = AsyncSession, expire_on_commit=False
+            bind = self.engine, class_ = AsyncSession, expire_on_commit=False
         )
 
 

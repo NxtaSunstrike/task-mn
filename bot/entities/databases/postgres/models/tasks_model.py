@@ -21,7 +21,7 @@ class Task(Base):
     status: Mapped[str] = MappedColumn(String, default = 'in progress', nullable = False)
     created: Mapped[str] = MappedColumn(String, nullable = False)
 
-    users: Mapped['User'] = relationship(back_populates = 'tasks', lazy = 'joined')
+    user: Mapped['User'] = relationship(back_populates = 'tasks', lazy = 'joined')
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}

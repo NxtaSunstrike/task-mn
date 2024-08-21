@@ -13,6 +13,10 @@ from entities.containers.database.postgres_container import PostgresContainer
 from entities.containers.database.redis_container import UserRedisContainer
 from entities.containers.database.redis_container import TasksRedisContainer
 
+from routers.user import router as user
+
+from filters.user.get_user_info import UserInfoFilter
+
 
 async def main(
     config: BotConfig, dispatcher: Dispatcher, postgres: PostgresContainer,
@@ -33,11 +37,20 @@ async def main(
     tasks_redis.config.port.from_value(config.redis_port)
     tasks_redis.config.db.from_value(2)
 
-    postgres.config.host(config)
-
+    await postgres.database().init_models()
 
     bot = Bot(token = config.token)
 
+    dispatcher.include_routers(
+        user.router,
+    )
+    dispatcher.message.filter(
+        UserInfoFilter(
+            db = postgres.user_service(),
+            user_redis = await user_redis.redis_service(),
+        )
+    )
+    
     await dispatcher.start_polling(bot)
 
 

@@ -7,8 +7,8 @@ from pydantic import Field
 class BotConfig(BaseSettings):
     token: str = Field(env.get('TOKEN'))
 
-    host: str = Field(env.get('REDIS_HOST'))
-    port: int = Field(env.get('REDIS_PORT'))
+    redis_host: str = Field(env.get('REDIS_HOST'))
+    redis_port: int = Field(env.get('REDIS_PORT'))
 
     db_host: str = Field(env.get('POSTGRES_HOST'))
     db_port: int = Field(env.get('POSTGRES_PORT'))
