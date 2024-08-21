@@ -18,21 +18,22 @@ class Database:
     def __init__(
         self, host: str, port: int, password: str, user: str, database: str
     ) -> None: 
-        self.Engine = create_async_engine(
+        self.engine = create_async_engine(
             url = f'postgresql+asyncpg://{user}:{password}@{host}:{port}/{database}',
             echo = True
         )
 
-        self.Async_Session = sessionmaker(
+        self.async_session = sessionmaker(
             bind = self.Engine, class_ = AsyncSession, expire_on_commit=False
         )
 
 
     @asynccontextmanager
-    async def GetSession(self)->AsyncGenerator[AsyncSession, None]:
-        session: AsyncSession = self.Async_Session()
+    async def get_session(self)->AsyncGenerator[AsyncSession, None]:
+        session: AsyncSession = self.async_session()
         try:
             yield session
+            await session.commit()
         except Exception:
             await session.rollback()
             raise
@@ -40,7 +41,7 @@ class Database:
             await session.close()
 
 
-    async def InitModels(self) -> None:
-        async with self.Engine.begin() as connection:
+    async def init_models(self) -> None:
+        async with self.engine.begin() as connection:
             await connection.run_sync(Base.metadata.drop_all)
             await connection.run_sync(Base.metadata.create_all)
